@@ -1,6 +1,9 @@
 # .idea/
 workspace.xml
 
+# Spotipy
+.cache-*
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
