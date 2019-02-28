@@ -17,13 +17,16 @@ if username is None:
 spotify_id = ""
 spotify_secret = ""
 # Put Genius developer credentials here
-genius_secret = ""
+genius_access_token = ""
 
-token = util.prompt_for_user_token(username=username,
-                                   scope=scope,
-                                   client_id=spotify_id,
-                                   client_secret=spotify_secret,
-                                   redirect_uri='http://localhost/')
+try:
+    token = util.prompt_for_user_token(username=username,
+                                       scope=scope,
+                                       client_id=spotify_id,
+                                       client_secret=spotify_secret,
+                                       redirect_uri='http://localhost/')
+except Exception:
+    sys.exit(1)
 
 spotify = spotipy.Spotify(auth=token)  # Spotipy API wrapper
 
@@ -33,12 +36,16 @@ except Exception:
     print("Network error, please verify connection.")
     sys.exit(1)
 
+if playing is None:
+    print("No song is currently playing.")
+    sys.exit(1)
+
 name = playing['item']['name']
 # Song names with parentheses
 name = name.split('(')[0].rstrip()
 artist = playing['item']['artists'][0]['name']
 
-genius = lyricsgenius.Genius(genius_secret)  # Genius API wrapper
+genius = lyricsgenius.Genius(genius_access_token)  # Genius API wrapper
 song = genius.search_song(name, artist)
 if song is not None:
     rows, columns = subprocess.check_output(['stty', 'size']).decode().split()
