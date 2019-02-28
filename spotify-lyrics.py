@@ -11,11 +11,17 @@ username = os.getenv('SPOTIFY_USERNAME')  # environment variable specifying Spot
 if username is None:
     print("Please specify Spotify username in an environment variable called SPOTIFY_USERNAME.")
     sys.exit(1)
+ 
+# Put Spotify credentials here
+client_id = ""
+client_secret = ""
+# Put Genius API key
+api_key = ""
 
 token = util.prompt_for_user_token(username=username,
                                    scope=scope,
-                                   client_id='762e2be7c3bf47fb94c4fc3aa210647f',
-                                   client_secret='42b74dea41ff48ffafb7f00eb9a3aaf5',
+                                   client_id=client_id,
+                                   client_secret=client_secret,
                                    redirect_uri='http://localhost/')
 spotify = spotipy.Spotify(auth=token)  # Spotipy API wrapper
 
@@ -23,7 +29,7 @@ playing = spotify.currently_playing()
 name = playing['item']['name']
 artist = playing['item']['artists'][0]['name']
 
-genius = lyricsgenius.Genius('H5mBdF6qCxfIjMFXY8pTFw-0vxFInPmJyJdpzF0Wc5sxEE7ECS4RikIrhv1JoDA_')  # Genius API wrapper
+genius = lyricsgenius.Genius(api_key)  # Genius API wrapper
 song = genius.search_song(name, artist)
 print()
 print(song.lyrics)
